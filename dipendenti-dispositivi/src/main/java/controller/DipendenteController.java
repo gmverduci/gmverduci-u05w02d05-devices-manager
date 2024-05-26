@@ -1,12 +1,13 @@
 package controller;
 
+
 import dto.DipendenteDto;
+import exception.BadRequestException;
 import exception.DipendenteNonTrovatoException;
-import exception.ParamErrorException;
 import model.Dipendente;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,59 +19,65 @@ import java.util.Optional;
 
 @RestController
 public class DipendenteController {
+
     @Autowired
     private DipendenteService dipendenteService;
 
-    @GetMapping("/dipendenti")
-    public Page<Dipendente> getAllDipendenti(@RequestParam(defaultValue = "0") int page,
-                                             @RequestParam(defaultValue = "10") int size,
-                                             @RequestParam(defaultValue = "id") String sortBy) {
+    @PostMapping("api/dipendenti")
+    @ResponseStatus(HttpStatus.CREATED)
+    public String saveDipendente(@RequestBody @Validated DipendenteDto dipendenteDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new BadRequestException(bindingResult.getAllErrors()
+                    .stream().map(e -> e.getDefaultMessage()).reduce("", (s, a) -> s + a));
+        }
+        return dipendenteService.saveDipendente(dipendenteDto);
+    }
+
+    @GetMapping("api/dipendenti")
+    public Page<Dipendente> getAutori(@RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "10") int size,
+                                      @RequestParam(defaultValue = "id") String sortBy) {
         return dipendenteService.getAllDipendenti(page, size, sortBy);
     }
 
-    @GetMapping("/dipendenti/{id}")
-    public Dipendente getDipendenteById(@PathVariable Integer id) {
+    @GetMapping("api/dipendenti/{id}")
+    public Dipendente getDipendenteById(@PathVariable int id) {
         Optional<Dipendente> dipendenteOptional = dipendenteService.getDipendenteById(id);
         if (dipendenteOptional.isPresent()) {
             return dipendenteOptional.get();
         } else {
-            throw new DipendenteNonTrovatoException("Dipendente id: " + id + " non presente nel database.");
+            throw new DipendenteNonTrovatoException("Dipendente non presente nel database.");
         }
     }
 
-    @PostMapping("/dipendenti")
-    public String saveDipendente(@RequestBody @Validated DipendenteDto dipendenteDto, BindingResult bindingResult) {
+    @PutMapping("/api/dipendenti/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Dipendente updateDipendente(@PathVariable int id, @RequestBody @Validated DipendenteDto dipendenteDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new ParamErrorException(bindingResult.getAllErrors().stream().
-                    map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .reduce("", ((d, d2) -> d + d2)));
-        }
-
-        return dipendenteService.saveDipendente(dipendenteDto);
-    }
-
-    @PutMapping("/dipendenti/{id}")
-    public Dipendente updateDipendente(@PathVariable Integer id,
-                                       @RequestBody @Validated DipendenteDto dipendenteDto,
-                                       BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            throw new ParamErrorException(bindingResult.getAllErrors().stream().
-                    map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .reduce("", ((d, d2) -> d + d2)));
+            throw new BadRequestException(bindingResult.getAllErrors().stream().
+                    map(objectError -> objectError.getDefaultMessage()).reduce("", ((s, s2) -> s + s2)));
         }
 
         return dipendenteService.updateDipendente(id, dipendenteDto);
     }
 
-    @DeleteMapping("/dipendenti/{id}")
-    public String deleteDipendente(@PathVariable Integer id) {
+    @DeleteMapping("/api/dipendenti/{id}")
+    public String deleteDipendente(@PathVariable int id) {
         return dipendenteService.deleteDipendente(id);
     }
 
-    @PatchMapping("/dipendenti/{id}")
-    public String patchAvatar(@RequestBody MultipartFile avatar,
-                                        @PathVariable Integer id) throws IOException {
-        return dipendenteService.patchAvatar(id, avatar);
+    @PatchMapping("/api/dipendenti/{id}")
+    public String patchImmagineProfiloDipendente(@PathVariable int id, @RequestBody MultipartFile immagineProfilo) throws IOException {
+        return dipendenteService.patchAvatar(id, immagineProfilo);
+    }
+
+    @PatchMapping("/api/dipendenti-laptop/{dipendenteId}")
+    public String patchLaptopDipendente(@PathVariable int dipendenteId, @RequestParam int laptopId) {
+        return dipendenteService.patchLaptopDipendente(dipendenteId, laptopId);
+    }
+
+    @PatchMapping("/api/dipendenti-smartphone/{dipendenteId}")
+    public String patchSmartphoneDipendente(@PathVariable int dipendenteId, @RequestParam int smartphoneId) {
+        return dipendenteService.patchSmartphoneDipendente(dipendenteId, smartphoneId);
     }
 }
