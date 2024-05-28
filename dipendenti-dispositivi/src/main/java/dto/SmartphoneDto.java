@@ -13,6 +13,6 @@ public class SmartphoneDto {
     private String modello;
     private double schermo;
     @NotBlank
-    private StatoDispositivo statoDispositivo;
+    private String statoDispositivo;
     @NotBlank
-    private TipoSmartphone tipoSmartphone;}
+    private String tipoSmartphone;}

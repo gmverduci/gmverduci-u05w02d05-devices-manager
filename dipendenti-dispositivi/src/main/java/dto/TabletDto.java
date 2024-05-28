@@ -13,7 +13,7 @@ public class TabletDto {
     private String modello;
     private double schermo;
     @NotBlank
-    private StatoDispositivo statoDispositivo;
+    private String statoDispositivo;
     @BooleanFlag
     private boolean simInternet;
 }

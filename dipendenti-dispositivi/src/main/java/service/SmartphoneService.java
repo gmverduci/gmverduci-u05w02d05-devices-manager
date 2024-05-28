@@ -4,6 +4,7 @@ package service;
 
 import dto.SmartphoneDto;
 import enums.StatoDispositivo;
+import enums.TipoSmartphone;
 import exception.DispositivoNonTrovatoException;
 import model.Smartphone;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,9 @@ public class SmartphoneService {
         smartphone.setMarca(smartphoneDto.getMarca());
         smartphone.setModello((smartphoneDto.getModello()));
         smartphone.setSchermo(smartphoneDto.getSchermo());
-        smartphone.setStatoDispositivo(smartphoneDto.getStatoDispositivo());
-        smartphone.setTipoSmartphone(smartphoneDto.getTipoSmartphone());
+        smartphone.setStatoDispositivo(StatoDispositivo.valueOf(smartphoneDto.getStatoDispositivo()));
 
+        smartphone.setTipoSmartphone(TipoSmartphone.valueOf(smartphoneDto.getTipoSmartphone()));
         smartphoneRepository.save(smartphone);
         return "Smartphone con ID " + smartphone.getId() + " creato con successo.";
     }
@@ -50,8 +51,9 @@ public class SmartphoneService {
             smartphone.setMarca(smartphoneDto.getMarca());
             smartphone.setModello((smartphoneDto.getModello()));
             smartphone.setSchermo(smartphoneDto.getSchermo());
-            smartphone.setStatoDispositivo(smartphoneDto.getStatoDispositivo());
-            smartphone.setTipoSmartphone(smartphoneDto.getTipoSmartphone());
+            smartphone.setStatoDispositivo(StatoDispositivo.valueOf(smartphoneDto.getStatoDispositivo()));
+
+            smartphone.setTipoSmartphone(TipoSmartphone.valueOf(smartphoneDto.getTipoSmartphone()));
 
             smartphoneRepository.save(smartphone);
             return smartphone;

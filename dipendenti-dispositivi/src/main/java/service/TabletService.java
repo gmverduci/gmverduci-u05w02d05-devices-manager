@@ -24,7 +24,7 @@ public class TabletService {
         tablet.setMarca(tabletDto.getMarca());
         tablet.setModello((tabletDto.getModello()));
         tablet.setSchermo(tabletDto.getSchermo());
-        tablet.setStatoDispositivo(tabletDto.getStatoDispositivo());
+        tablet.setStatoDispositivo(StatoDispositivo.valueOf(tabletDto.getStatoDispositivo()));
         tablet.setSimInternet(tabletDto.isSimInternet());
 
         tabletRepository.save(tablet);
@@ -48,7 +48,7 @@ public class TabletService {
             tablet.setMarca(tabletDto.getMarca());
             tablet.setModello((tabletDto.getModello()));
             tablet.setSchermo(tabletDto.getSchermo());
-            tablet.setStatoDispositivo(tabletDto.getStatoDispositivo());
+            tablet.setStatoDispositivo(StatoDispositivo.valueOf(tabletDto.getStatoDispositivo()));
             tablet.setSimInternet(tabletDto.isSimInternet());
 
             tabletRepository.save(tablet);

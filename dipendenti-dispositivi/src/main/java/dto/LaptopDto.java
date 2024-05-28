@@ -12,6 +12,6 @@ public class LaptopDto {
     private String modello;
     private double schermo;
     @NotBlank
-    private StatoDispositivo statoDispositivo;
+    private String statoDispositivo;
     private int ram;
 }
