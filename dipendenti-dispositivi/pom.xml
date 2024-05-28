@@ -8,7 +8,7 @@
 		<version>3.3.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>u05w02d05-progetto-settimanale</groupId>
+	<groupId>05w02d05-devices-manager</groupId>
 	<artifactId>dipendenti-dispositivi</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>dipendenti-dispositivi</name>
