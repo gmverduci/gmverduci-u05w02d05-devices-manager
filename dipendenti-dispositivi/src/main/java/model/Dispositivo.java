@@ -17,7 +17,7 @@ public abstract class Dispositivo {
     private String marca;
     private String modello;
     private double schermo;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private StatoDispositivo statoDispositivo;
 
     @ManyToOne
